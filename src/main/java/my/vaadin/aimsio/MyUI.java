@@ -2,6 +2,11 @@ package my.vaadin.aimsio;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.vaadin.addon.charts.Chart;
+import com.vaadin.addon.charts.model.ChartType;
+import com.vaadin.addon.charts.model.Configuration;
+import com.vaadin.addon.charts.model.DataSeries;
+import com.vaadin.addon.charts.model.DataSeriesItem;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
@@ -13,31 +18,39 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-/**
- * This UI is the application entry point. A UI may either represent a browser window 
- * (or tab) or some part of a html page where a Vaadin application is embedded.
- * <p>
- * The UI is initialized using {@link #init(VaadinRequest)}. This method is intended to be 
- * overridden to add component to the user interface and initialize non-component functionality.
- */
+
 @Theme("mytheme")
 @Widgetset("my.vaadin.aimsio.MyAppWidgetset")
 public class MyUI extends UI {
-
+	private SignalRepository repo=new SignalRepository();
+	
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+    	
+    	
         final VerticalLayout layout = new VerticalLayout();
         
-        final TextField name = new TextField();
-        name.setCaption("Type your name here:");
-
-        Button button = new Button("Click Me");
-        button.addClickListener( e -> {
-            layout.addComponent(new Label("Thanks " + name.getValue() 
-                    + ", it works!"));
-        });
+                
+        Chart chart=new Chart();
+        layout.addComponent(chart);
         
-        layout.addComponents(name, button);
+        Configuration conf = chart.getConfiguration();
+        conf.setTitle("# of signals over time");
+        conf.getChart().setType(ChartType.BAR);
+        
+
+		DataSeries signals = new DataSeries("Signals");
+		for(Signal signal : repo.ListAll()) {
+		 // time on the X-axis, count on the Y-axis
+		 signals.add(new DataSeriesItem(
+		                   signal.getDate(),
+		                   signal.getCount()));
+		}
+		conf.addSeries(signals);
+		
+		conf.getxAxis().setTitle("Time");
+		conf.getyAxis().setTitle("Signal Count");
+		
         layout.setMargin(true);
         layout.setSpacing(true);
         

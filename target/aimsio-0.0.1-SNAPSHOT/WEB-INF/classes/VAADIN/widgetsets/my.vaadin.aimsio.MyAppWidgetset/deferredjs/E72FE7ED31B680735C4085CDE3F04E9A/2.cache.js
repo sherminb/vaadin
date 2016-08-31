@@ -1,0 +1,1 @@
+$wnd.my_vaadin_aimsio_MyAppWidgetset.runAsyncCallback2('nib(1654,1,Pie);_.vc=function Kxc(){Ohc((!Hhc&&(Hhc=new Uhc),Hhc),this.a.d)};Y9d(Zh)(2);\n//# sourceURL=my.vaadin.aimsio.MyAppWidgetset-2.js\n')
